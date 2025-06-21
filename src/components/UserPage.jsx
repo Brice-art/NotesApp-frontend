@@ -22,8 +22,9 @@ const UserPage = () => {
   useEffect(() => {
     const fetchNotes = async () => {
       try {
+        const API_URL = import.meta.env.VITE_API_URL;
         const response = await axios.get(
-          `http://localhost:3000/notes/${userId}`
+          `${API_URL}/notes/${userId}`
         );
         setNotes(response.data);
         setLoading(false);

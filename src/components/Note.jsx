@@ -19,9 +19,10 @@ const Note = (props) => {
 
   const deleteNote = async () => {
     const noteId = props.id;
+    const API_URL = import.meta.env.VITE_API_URL;
 
     try {
-      await axios.delete(`http://localhost:3000/notes/${userId}/${noteId}`);
+      await axios.delete(`${API_URL}/notes/${userId}/${noteId}`);
       props.onDelete(noteId); // Inform parent to update UI
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -30,9 +31,10 @@ const Note = (props) => {
 
   const handleSave = async () => {
     const noteId = props.id;
+    const API_URL = import.meta.env.VITE_API_URL;
     try {
       const response = await axios.put(
-        `http://localhost:3000/notes/${userId}/${noteId}`,
+        `${API_URL}/notes/${userId}/${noteId}`,
         { title, content }
       );
       setIsEditing(false);
