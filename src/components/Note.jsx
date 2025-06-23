@@ -22,7 +22,7 @@ const Note = (props) => {
     const API_URL = import.meta.env.VITE_API_URL;
 
     try {
-      await axios.delete(`${API_URL}/notes/${userId}/${noteId}`);
+      await axios.delete(`${API_URL}/notes/${userId}/${noteId}`, { withCredentials: true });
       props.onDelete(noteId); // Inform parent to update UI
     } catch (error) {
       console.error("Failed to delete note:", error);
@@ -35,7 +35,7 @@ const Note = (props) => {
     try {
       const response = await axios.put(
         `${API_URL}/notes/${userId}/${noteId}`,
-        { title, content }
+        { title, content }, { withCredentials: true }
       );
       setIsEditing(false);
     } catch (error) {

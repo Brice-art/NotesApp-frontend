@@ -39,7 +39,7 @@ const InputSpace = (props) => {
       const API_URL = import.meta.env.VITE_API_URL;
       const response = await axios.post(
         `${API_URL}/notes/${userId}`,
-        { title, content }
+        { title, content } , { withCredentials: true }
       );
       props.onAdd(response.data);
       setContent("");
