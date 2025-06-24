@@ -33,6 +33,7 @@ const Login = () => {
         const response = await axios.post(`${API_URL}/auth/login`, { email, password }, { withCredentials: true });
         if (response.data) {
             const userId = response.data._id;
+            await axios.get(`${API_URL}/notes/${userId}`, { withCredentials: true });
             navigate(`/${userId}/notes`)
         }
     } catch (error) {
