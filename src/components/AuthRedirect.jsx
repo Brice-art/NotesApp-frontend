@@ -1,40 +1,27 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api';
 
 const AuthRedirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkSession = async () => {
+    const checkAuth = async () => {
       try {
-        const API_URL = import.meta.env.VITE_API_URL;
-        // This endpoint should return user info if session is alive, or 401 if not
-        const response = await axios.get(`${API_URL}/auth/session`, { withCredentials: true });
-        if (response.data && response.data.userId) {
-          // Session is alive, navigate to user page
-          navigate(`/${response.data.userId}/notes`);
-        } else {
-          // User does not exist, navigate to signup
-          navigate("/signup");
-        }
+        await authAPI.checkSession();
+        navigate('/dashboard');
       } catch (error) {
-        if (error.response && error.response.status === 401) {
-          // Session expired, navigate to login
-          navigate("/login");
-        } else if (error.response && error.response.status === 404) {
-          // User does not exist, navigate to signup
-          navigate("/signup");
-        } else {
-          // Fallback: navigate to login
-          navigate("/login");
-        }
+        navigate('/login');
       }
     };
-    checkSession();
+    checkAuth();
   }, [navigate]);
 
-  return null;
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-600"></div>
+    </div>
+  );
 };
 
 export default AuthRedirect;
