@@ -1,20 +1,16 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api';
 
 const AuthRedirect = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        await authAPI.checkSession();
-        navigate('/dashboard');
-      } catch (error) {
-        navigate('/login');
-      }
-    };
-    checkAuth();
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/dashboard');
+    } else {
+      navigate('/login');
+    }
   }, [navigate]);
 
   return (
