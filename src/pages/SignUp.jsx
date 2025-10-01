@@ -15,38 +15,41 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
-    e.preventDefault();
-    setError('');
+  e.preventDefault();
+  setError('');
 
-    if (!name.trim()) {
-      setError('Please enter your name');
-      return;
-    }
-    if (!validateEmail(email)) {
-      setError('Please enter a valid email address');
-      return;
-    }
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
-    }
+  if (!name.trim()) {
+    setError('Please enter your name');
+    return;
+  }
+  if (!validateEmail(email)) {
+    setError('Please enter a valid email address');
+    return;
+  }
+  if (password.length < 6) {
+    setError('Password must be at least 6 characters');
+    return;
+  }
+  if (password !== confirmPassword) {
+    setError('Passwords do not match');
+    return;
+  }
 
-    setLoading(true);
-    try {
-      const response = await authAPI.signup(name, email, password);
-      if (response.data) {
-        navigate('/dashboard');
-      }
-    } catch (err) {
-      setError(err.response?.data?.error || 'Failed to create account');
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const response = await authAPI.signup(name, email, password);
+    
+    // Store token and user info
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('user', JSON.stringify(response.data.user));
+    
+    navigate('/dashboard');
+  } catch (err) {
+    setError(err.response?.data?.error || 'Failed to create account');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-4">

@@ -8,16 +8,20 @@ const Header = ({ userName }) => {
   const [loading, setLoading] = useState(false);
 
   const handleLogout = async () => {
-    setLoading(true);
-    try {
-      await authAPI.logout();
-      navigate('/login');
-    } catch (error) {
-      console.error('Logout failed:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    await authAPI.logout();
+    navigate('/login');
+  } catch (error) {
+    console.error('Logout failed:', error);
+    // Still navigate even if API call fails
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/login');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
