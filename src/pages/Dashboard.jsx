@@ -7,7 +7,6 @@ import NoteModal from '../components/NoteModal';
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
-  const [userName, setUserName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
@@ -15,19 +14,6 @@ const Dashboard = () => {
   const [showArchived, setShowArchived] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
-  // Fetch user info
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await authAPI.checkSession();
-        setUserName(response.data.user.name);
-      } catch (err) {
-        console.error('Failed to fetch user info:', err);
-      }
-    };
-    fetchUser();
-  }, []);
 
   // Fetch notes
   useEffect(() => {
@@ -117,7 +103,7 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Header userName={userName} />
+      <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Search and Actions Bar */}
