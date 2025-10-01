@@ -1,27 +1,40 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, User } from 'lucide-react';
 import { authAPI } from '../services/api';
 
-const Header = ({ userName }) => {
+const Header = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    // Get user from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        setUserName(user.name);
+      } catch (error) {
+        console.error('Error parsing user data:', error);
+      }
+    }
+  }, []);
 
   const handleLogout = async () => {
-  setLoading(true);
-  try {
-    await authAPI.logout();
-    navigate('/login');
-  } catch (error) {
-    console.error('Logout failed:', error);
-    // Still navigate even if API call fails
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/login');
-  } finally {
-    setLoading(false);
-  }
-};
+    setLoading(true);
+    try {
+      await authAPI.logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      navigate('/login');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
